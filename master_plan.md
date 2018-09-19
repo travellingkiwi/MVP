@@ -39,7 +39,7 @@ Create readme and maintain site.
 @leonardobdes
 
 *	System Base Setup  
-Create system and share with everyone.
+Create system and share with everyone.  
 @travellingkiwi 
 
 *	Languages  
