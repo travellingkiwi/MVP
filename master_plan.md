@@ -39,11 +39,8 @@ Create readme and maintain site.
 @leonardobdes
 
 *	System Base Setup  
-Create ks.cfg to enable easy build of base system  
-@travellingkiwi  
-
+Create ks.cfg to enable easy build of base system  @travellingkiwi  
 Create system and share with everyone.  
-
 
 *	Languages  
 Install iControl and other languages
