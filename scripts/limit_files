@@ -1,0 +1,88 @@
+#!/bin/bash
+#
+#*******************************************************************
+#** limit_files                                                   **
+#**                                                               **
+#** Copyright (C) 2018, Hamish Marson <hamish@travellingkiwi.com> **
+#**                                                               **
+#** This program is free software; you can redistribute it and/or **
+#** modify it under the terms of the GNU General Public License   **
+#** version 3 as published by the Free Software Foundation.       **
+#**                                                               **
+#** This program is distributed in the hope that it will be       **
+#** useful, but WITHOUT ANY WARRANTY; without even the implied    **
+#** warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR       **
+#** PURPOSE. See the GNU General Public License for more details. **
+#**                                                               **
+#** You should have received a copy of the GNU General Public     **
+#** License along with this program; if not, write to the Free    **
+#** Software Foundation, Inc., 59 Temple Place, Suite 330,        **
+#** Boston, MA   02111-1307   USA                                 **
+#**                                                               **
+#*******************************************************************
+#
+# Limit the number of matching files to X copies... 
+#
+
+#
+# Defaults
+DEF_LIMIT=5
+WETRUN=n
+RM=rm -f
+
+# Parameters from the command line
+while getopts "l:m:y" o; do
+    case "${o}" in
+        m)
+            MATCH=${OPTARG}
+            shift
+            ;;
+        l)
+            LIMIT=${OPTARG}
+            shift
+            ;;
+        y)
+            WETRUN=y
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+
+if [[ "${MATCH}" == "" ]];
+then
+  echo "ERROR: Must specify a match"
+  exit 1
+fi
+
+if [[ "${LIMIT}" == "" ]];
+then
+  LIMIT=${DEF_LIMIT}
+fi
+
+#
+# We use tail to keep the first ${LIMIT} files... But tail counts from 1. WHich means if we specify 5 we'll get the 5th
+# file listed as well... So bump ${LIMIT} up by 1
+((LIMIT++))
+
+FILES=`ls -t ${MATCH} | tail +${LIMIT}`
+FCOUNT=`echo ${FILES} | wc -w`
+echo "DEBUG: Found ${FCOUNT} files"
+
+for f in ${FILES}
+do
+  if [[ "${WETRUN}" != "y" ]];
+  then
+    echo "[DRYRUN]: Would ${RM} ${f}"
+  else
+    ${RM} ${f}
+  fi
+done
+
+
+
+
+exit 0
+
+
